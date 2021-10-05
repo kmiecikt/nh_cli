@@ -9,7 +9,16 @@ namespace NotificationHubs.Cli.Commands
     {
         protected override async Task<int> Execute(NotificationHubClient nhClient)
         {
-            await nhClient.SendNotificationAsync(CreatePayload());
+            if (ScheduledTime != null)
+            {
+                var result = await nhClient.ScheduleNotificationAsync(CreatePayload(), ScheduledTime.Value);
+                WriteCommandResult(result);
+            }
+            else
+            {
+                var result = await nhClient.SendNotificationAsync(CreatePayload());
+                WriteCommandResult(result);
+            }
 
             return 0;
         }

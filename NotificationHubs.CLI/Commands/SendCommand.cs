@@ -13,6 +13,9 @@ namespace NotificationHubs.Cli.Commands
         [Option("body")]
         public string Body { get; set; }
 
+        [Option("scheduled-time")]
+        public DateTimeOffset? ScheduledTime { get; set; }
+
         protected Notification CreatePayload()
         {
             if (PnsType == PnsType.NotSet)
@@ -26,6 +29,7 @@ namespace NotificationHubs.Cli.Commands
                 case PnsType.Fcm: return new FcmNotification(Body);
                 case PnsType.Mpns: return new MpnsNotification(Body);
                 case PnsType.Windows: return new WindowsNotification(Body);
+
                 default: throw new NotSupportedException($"Notifications for PNS type {PnsType} are not supported by the CLI"); 
             }
         }

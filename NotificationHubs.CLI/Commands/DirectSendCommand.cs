@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using Microsoft.Azure.NotificationHubs;
+using System;
 using System.Threading.Tasks;
 
 namespace NotificationHubs.Cli.Commands
@@ -12,7 +13,11 @@ namespace NotificationHubs.Cli.Commands
 
         protected override async Task<int> Execute(NotificationHubClient nhClient)
         {
-            await nhClient.SendDirectNotificationAsync(CreatePayload(), DeviceHandle);
+            if (ScheduledTime != null)
+                throw new NotSupportedException("Scheduled notifications are not supported for Direct Send");
+
+            var result = await nhClient.SendDirectNotificationAsync(CreatePayload(), DeviceHandle);
+            WriteCommandResult(result);
 
             return 0;
         }

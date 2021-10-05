@@ -2,6 +2,7 @@
 using Microsoft.Azure.NotificationHubs;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NotificationHubs.Cli.Commands
@@ -49,6 +50,13 @@ namespace NotificationHubs.Cli.Commands
                 Console.Error.WriteLine(ex.ToString());
                 return 1;
             }
+        }
+
+        protected void WriteCommandResult<T>(T result)
+        {
+            var json = JsonSerializer.Serialize(result);
+
+            Console.WriteLine(json);
         }
 
         protected abstract Task<int> Execute(NotificationHubClient nhClient);
