@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.CLI
 {
     [Verb("broadcast-send", HelpText = "Send notification to all devices")]
-    public record BroadcastSendOptions: OptionsBase
+    public record BroadcastSendOptions: CommandBase
     {
         [Option(ResourceType = typeof(string))]
         public string Body { get; set; }

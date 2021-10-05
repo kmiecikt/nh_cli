@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.CLI
 {
     [Verb("direct-send", HelpText = "Send notification to single device")]
-    public record DirectSendOptions: OptionsBase
+    public record DirectSendCommand: CommandBase
     {
         [Option]
         public string Body { get; set; }
