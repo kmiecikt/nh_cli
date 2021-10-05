@@ -9,7 +9,14 @@ namespace NotificationHubs.Cli
         static async Task<int> Main(string[] args)
         {
             return await Parser.Default
-                .ParseArguments<DirectSendCommand, BroadcastSendCommand, AudienceSendCommand>(args)
+                .ParseArguments<
+                    DirectSendCommand, 
+                    BroadcastSendCommand, 
+                    AudienceSendCommand, 
+                    CancelNotificationAsync,
+                    CreateRegistrationCommand,
+                    UpsertRegistrationCommand,
+                    CreateRegistrationIdCommand>(args)
                 .MapResult(
                     (CommandBase options) => options.Execute(),
                     _ => WriteUsage()
