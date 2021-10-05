@@ -1,7 +1,8 @@
 ﻿using CommandLine;
+using NotificationHubs.Cli.Commands;
 using System.Threading.Tasks;
 
-namespace NotificationHubs.CLI
+namespace NotificationHubs.Cli
 {
     public class Program
     {

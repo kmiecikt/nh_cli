@@ -4,7 +4,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace NotificationHubs.CLI
+namespace NotificationHubs.Cli.Commands
 {
     public abstract record CommandBase
     {
