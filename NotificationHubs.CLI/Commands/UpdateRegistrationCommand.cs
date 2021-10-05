@@ -9,8 +9,8 @@ namespace NotificationHubs.Cli.Commands
     [Verb("update-registration", HelpText = "Updates an existing registration")]
     public record UpdateRegistrationCommand : CommandBase
     {
-        [Option("pns-registration-id", Required = true)]
-        public string PnsRegistrationId { get; set; }
+        [Option("pns-handle", Required = true)]
+        public string PnsHandle { get; set; }
 
         [Option("registration-id", Required = true)]
         public string RegistrationId { get; set; }
@@ -28,7 +28,7 @@ namespace NotificationHubs.Cli.Commands
             var registration = new FcmRegistrationDescription(existingRegistration)
             {
                 Tags = new HashSet<string>(tags),
-                FcmRegistrationId = PnsRegistrationId
+                FcmRegistrationId = PnsHandle
             };
 
             var result = await nhClient.UpdateRegistrationAsync(registration);

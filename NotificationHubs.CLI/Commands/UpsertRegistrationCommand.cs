@@ -8,8 +8,8 @@ namespace NotificationHubs.Cli.Commands
     [Verb("upsert-registration", HelpText = "Creates or updates registration")]
     public record UpsertRegistrationCommand : CommandBase
     {
-        [Option("pns-registration-id", Required = true)]
-        public string PnsRegistrationId { get; set; }
+        [Option("pns-handle", Required = true)]
+        public string PnsHandle { get; set; }
 
         [Option("registration-id", Required = true)]
         public string RegistrationId { get; set; }
@@ -22,7 +22,7 @@ namespace NotificationHubs.Cli.Commands
             var tags = Tags?.Split(',') ?? Enumerable.Empty<string>();
 
             // TODO: support multiple platforms
-            var registration = new FcmRegistrationDescription(PnsRegistrationId, tags)
+            var registration = new FcmRegistrationDescription(PnsHandle, tags)
             {
                 RegistrationId = RegistrationId
             };

@@ -8,8 +8,8 @@ namespace NotificationHubs.Cli.Commands
     [Verb("create-registration", HelpText = "Creates new registration")]
     public record CreateRegistrationCommand : CommandBase
     {
-        [Option("pns-registration-id", Required = true)]
-        public string PnsRegistrationId { get; set; }
+        [Option("pns-handle", Required = true)]
+        public string PnsHandle { get; set; }
 
         [Option("tags")]
         public string Tags { get; set; }
@@ -19,7 +19,7 @@ namespace NotificationHubs.Cli.Commands
             var tags = Tags?.Split(',') ?? Enumerable.Empty<string>();
 
             // TODO: support multiple platforms
-            var registration = new FcmRegistrationDescription(PnsRegistrationId, tags);
+            var registration = new FcmRegistrationDescription(PnsHandle, tags);
 
             var result = await nhClient.CreateRegistrationAsync(registration);
             WriteCommandResult(result);

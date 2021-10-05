@@ -18,11 +18,13 @@ namespace NotificationHubs.Cli
                     typeof(UpsertRegistrationCommand),
                     typeof(UpdateRegistrationCommand),
                     typeof(CreateRegistrationIdCommand),
-                    typeof(GetRegistrationCommand))
+                    typeof(GetRegistrationCommand),
+                    typeof(GetRegistrationsByTagCommand),
+                    typeof(GetRegistrationsCommand),
+                    typeof(GetRegistrationsByChannelCommand))
                 .MapResult(
                     (CommandBase options) => options.Execute(),
-                    _ => WriteUsage()
-                 ); 
+                    _ => WriteUsage()); 
         }
 
         private static Task<int> WriteUsage()
