@@ -47,7 +47,7 @@ namespace NotificationHubs.Cli.Commands
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error while sending notification. Used options: {Environment.NewLine}    {this}{Environment.NewLine}Exception:");
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
 
                 return 1;
             }

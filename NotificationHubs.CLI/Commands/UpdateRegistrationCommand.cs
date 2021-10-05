@@ -1,12 +1,13 @@
 ﻿using CommandLine;
 using Microsoft.Azure.NotificationHubs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace NotificationHubs.Cli.Commands
 {
-    [Verb("upsert-registration", HelpText = "Creates or updates registration")]
-    public record UpsertRegistrationCommand : CommandBase
+    [Verb("update-registration", HelpText = "Updates an existing registration")]
+    public record UpdateRegistrationCommand : CommandBase
     {
         [Option("pns-registration-id", Required = true)]
         public string PnsRegistrationId { get; set; }
@@ -22,12 +23,15 @@ namespace NotificationHubs.Cli.Commands
             var tags = Tags?.Split(',') ?? Enumerable.Empty<string>();
 
             // TODO: support multiple platforms
-            var registration = new FcmRegistrationDescription(PnsRegistrationId, tags)
+            var existingRegistration = await nhClient.GetRegistrationAsync<FcmRegistrationDescription>(RegistrationId);
+
+            var registration = new FcmRegistrationDescription(existingRegistration)
             {
-                RegistrationId = RegistrationId
+                Tags = new HashSet<string>(tags),
+                FcmRegistrationId = PnsRegistrationId
             };
 
-            var result = await nhClient.CreateOrUpdateRegistrationAsync(registration);
+            var result = await nhClient.UpdateRegistrationAsync(registration);
             WriteCommandResult(result);
 
             return 0;
