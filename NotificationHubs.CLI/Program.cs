@@ -21,7 +21,8 @@ namespace NotificationHubs.Cli
                     typeof(GetRegistrationCommand),
                     typeof(GetRegistrationsByTagCommand),
                     typeof(GetRegistrationsCommand),
-                    typeof(GetRegistrationsByChannelCommand))
+                    typeof(GetRegistrationsByChannelCommand),
+                    typeof(UpsertInstallationCommand))
                 .MapResult(
                     (CommandBase options) => options.Execute(),
                     _ => WriteUsage()); 
