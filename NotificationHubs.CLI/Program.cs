@@ -30,7 +30,8 @@ namespace NotificationHubs.Cli
                     typeof(DeleteRegistrationCommand),
                     typeof(GetFeedbackContainerCommand),
                     typeof(GetNotificationOutcomeCommand),
-                    typeof(SubmitJobCommand))
+                    typeof(SubmitJobCommand),
+                    typeof(GetJobCommand))
                 .MapResult(
                     (CommandBase options) => options.Execute(),
                     _ => WriteUsage()); 
