@@ -1,1 +1,2 @@
-# nh_cli
+# Notification Hubs CLI
+(Full description will be added soon)
