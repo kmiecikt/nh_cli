@@ -1,6 +1,8 @@
 ﻿using CommandLine;
 using Microsoft.Azure.NotificationHubs;
+using NotificationHubs.Cli.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,31 +17,21 @@ namespace NotificationHubs.Cli.Commands
         [Option]
         public string Hub { get; set; }
 
-        [Option("ignore-certificate-errors")]
-        public bool IgnoreCertificateErrors { get; set; }
+        [Option("log-requests")]
+        public bool LogRequests { get; set; }
+
+        [Option("custom-headers", Separator = ',')]
+        public IList<string> CustomHeaders { get; set; }
 
         public async Task<int> Execute()
         {
             try
             {
-                var handler = new HttpClientHandler
-                {
-                    SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13,
-                    ClientCertificateOptions = ClientCertificateOption.Manual
-                };
-
-                if (IgnoreCertificateErrors)
-                {
-                    handler.ServerCertificateCustomValidationCallback = (_, cert, _, _) =>
-                    {
-                        Console.WriteLine($"Skipping validation for certificate with SubjectName {cert.SubjectName.Name}");
-                        return true;
-                    };
-                }
+                var httpClient = CreateHttpClient();
 
                 var nhClient = new NotificationHubClient(ConnectionString, Hub, new NotificationHubSettings
                 {
-                    MessageHandler = handler
+                    HttpClient = httpClient
                 });
 
                 return await Execute(nhClient);
@@ -51,6 +43,35 @@ namespace NotificationHubs.Cli.Commands
 
                 return 1;
             }
+        }
+
+        private HttpClient CreateHttpClient()
+        {
+            HttpMessageHandler handler = new HttpClientHandler
+            {
+                SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13,
+                ClientCertificateOptions = ClientCertificateOption.Manual
+            };
+
+            if (LogRequests)
+            {
+                handler = new LoggingHandler(handler);
+            }
+
+            var httpClient = new HttpClient(handler, true);
+
+            if (CustomHeaders != null)
+            {
+                foreach (var header in CustomHeaders)
+                {
+                    var keyValue = header.Split(':');
+                    if (keyValue.Length != 2)
+                        throw new ArgumentException($"Invalid custom header: {header}. Headers must be passed in format key1:value1,key2:value2", nameof(CustomHeaders));
+                    httpClient.DefaultRequestHeaders.Add(keyValue[0], keyValue[1]);
+                }
+            }
+
+            return httpClient;
         }
 
         protected void WriteCommandResult<T>(T result)
