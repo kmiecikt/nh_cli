@@ -27,7 +27,9 @@ namespace NotificationHubs.Cli
                     typeof(DeleteInstallationCommand),
                     typeof(PatchInstallationCommand),
                     typeof(DeleteRegistrationsByChannelCommand),
-                    typeof(DeleteRegistrationCommand))
+                    typeof(DeleteRegistrationCommand),
+                    typeof(GetFeedbackContainerCommand),
+                    typeof(GetNotificationOutcomeCommand))
                 .MapResult(
                     (CommandBase options) => options.Execute(),
                     _ => WriteUsage()); 
