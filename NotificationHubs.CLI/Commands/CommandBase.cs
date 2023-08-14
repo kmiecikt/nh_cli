@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 using Microsoft.Azure.NotificationHubs;
-using NotificationHubs.Cli.Utilities;
+using NotificationHubs.Cli.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -17,17 +17,24 @@ namespace NotificationHubs.Cli.Commands
         [Option]
         public string Hub { get; set; }
 
-        [Option("log-requests")]
-        public bool LogRequests { get; set; }
+        [Option("log-request")]
+        public bool LogRequest { get; set; }
+
+        [Option("log-response")]
+        public bool LogResponse { get; set; }
+
+        [Option("log-format", Default = Logging.LogFormat.Text)]
+        public LogFormat LogFormat { get; set; }
 
         [Option("custom-headers", Separator = ',')]
         public IList<string> CustomHeaders { get; set; }
 
         public async Task<int> Execute()
         {
+            var logger = CreateLogger();
             try
             {
-                var httpClient = CreateHttpClient();
+                var httpClient = CreateHttpClient(logger);
 
                 var nhClient = new NotificationHubClient(ConnectionString, Hub, new NotificationHubSettings
                 {
@@ -43,19 +50,36 @@ namespace NotificationHubs.Cli.Commands
 
                 return 1;
             }
+            finally
+            {
+                logger.Flush();
+            }
         }
 
-        private HttpClient CreateHttpClient()
+        private ICliLogger CreateLogger()
+        {
+            return LogFormat == Logging.LogFormat.Text
+                ? new TextLogger()
+                : new JsonLogger();
+        }
+
+        private HttpClient CreateHttpClient(ICliLogger logger)
         {
             HttpMessageHandler handler = new HttpClientHandler
             {
                 SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13,
-                ClientCertificateOptions = ClientCertificateOption.Manual
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                MaxConnectionsPerServer = 100
             };
 
-            if (LogRequests)
+            if (LogRequest)
             {
-                handler = new LoggingHandler(handler);
+                handler = new RequestLoggingHandler(logger, handler);
+            }
+
+            if (LogResponse)
+            {
+                handler = new ResponseHeadersLoggingHandler(logger, handler);
             }
 
             var httpClient = new HttpClient(handler, true);
