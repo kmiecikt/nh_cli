@@ -34,7 +34,8 @@ namespace NotificationHubs.Cli
                     typeof(GetJobCommand),
                     typeof(GetJobsCommand),
                     typeof(GetHubCommand),
-                    typeof(GetHubsCommand))
+                    typeof(GetHubsCommand),
+                    typeof(DeleteHubCommand))
                 .MapResult(
                     (CommandBase options) => options.ExecuteAsync(),
                     _ => WriteUsage()); 
