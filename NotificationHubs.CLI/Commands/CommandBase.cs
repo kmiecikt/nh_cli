@@ -14,9 +14,6 @@ namespace NotificationHubs.Cli.Commands
         [Option("connection-string")]
         public string ConnectionString { get; set; }
 
-        [Option]
-        public string Hub { get; set; }
-
         [Option("log-request")]
         public bool LogRequest { get; set; }
 
@@ -29,19 +26,15 @@ namespace NotificationHubs.Cli.Commands
         [Option("custom-headers", Separator = ',')]
         public IList<string> CustomHeaders { get; set; }
 
-        public async Task<int> Execute()
+        public async Task<int> ExecuteAsync()
         {
-            var logger = CreateLogger();
+            using var logger = CreateLogger();
+
             try
             {
                 var httpClient = CreateHttpClient(logger);
 
-                var nhClient = new NotificationHubClient(ConnectionString, Hub, new NotificationHubSettings
-                {
-                    HttpClient = httpClient
-                });
-
-                return await Execute(nhClient);
+                return await ExecuteAsync(httpClient);
             }
             catch (Exception ex)
             {
@@ -50,20 +43,18 @@ namespace NotificationHubs.Cli.Commands
 
                 return 1;
             }
-            finally
-            {
-                logger.Flush();
-            }
         }
 
-        private ICliLogger CreateLogger()
+        protected abstract Task<int> ExecuteAsync(HttpClient httpClient);
+
+        protected ICliLogger CreateLogger()
         {
             return LogFormat == Logging.LogFormat.Text
                 ? new TextLogger()
                 : new JsonLogger();
         }
 
-        private HttpClient CreateHttpClient(ICliLogger logger)
+        protected HttpClient CreateHttpClient(ICliLogger logger)
         {
             HttpMessageHandler handler = new HttpClientHandler
             {
@@ -104,7 +95,5 @@ namespace NotificationHubs.Cli.Commands
 
             Console.WriteLine(json);
         }
-
-        protected abstract Task<int> Execute(NotificationHubClient nhClient);
     }
 }

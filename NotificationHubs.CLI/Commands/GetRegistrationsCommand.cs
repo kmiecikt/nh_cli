@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("get-registrations", HelpText = "Gets all registrations")]
-    public record GetRegistrationsCommand : CommandBase
+    public record GetRegistrationsCommand : HubLevelCommandBase
     {
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             const int batchSize = 200;
             var result = new List<RegistrationDescription>();

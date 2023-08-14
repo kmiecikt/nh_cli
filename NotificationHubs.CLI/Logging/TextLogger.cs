@@ -7,9 +7,9 @@ namespace NotificationHubs.Cli.Logging
         private Request _request;
         private Response _response;
 
-        public void Flush()
+        public void Dispose()
         {
-            if (_response == null || _response == null)
+            if (_request == null && _response == null)
             {
                 return;
             }
@@ -25,6 +25,9 @@ namespace NotificationHubs.Cli.Logging
             {
                 WriteResponse(_response);
             }
+
+            _request = null;
+            _response = null;
         }
 
         private void WriteRequest(Request request)

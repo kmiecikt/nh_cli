@@ -11,7 +11,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("device-handle", Required = true)]
         public string DeviceHandle { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             if (ScheduledTime != null)
                 throw new NotSupportedException("Scheduled notifications are not supported for Direct Send");

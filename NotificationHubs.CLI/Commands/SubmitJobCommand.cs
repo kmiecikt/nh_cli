@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("submit-job", HelpText = "Create Notification Hub Job")]
-    public record SubmitJobCommand : CommandBase
+    public record SubmitJobCommand : HubLevelCommandBase
     {
         [Option("job-type", Required = true)]
         public NotificationHubJobType JobType { get; set; }
@@ -17,7 +17,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("input-file-uri")]
         public string ImportFielUri { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             var job = new NotificationHubJob
             {

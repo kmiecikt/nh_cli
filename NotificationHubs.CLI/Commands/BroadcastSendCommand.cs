@@ -7,7 +7,7 @@ namespace NotificationHubs.Cli.Commands
     [Verb("broadcast-send", HelpText = "Send notification to all devices")]
     public record BroadcastSendCommand: SendCommand
     {
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             if (ScheduledTime != null)
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("upsert-installation", HelpText = "Creates or updates an installation")]
-    public record UpsertInstallationCommand : CommandBase
+    public record UpsertInstallationCommand : HubLevelCommandBase
     {
         [Option("installation-id", Required = true)]
         public string InstallationId { get; set; }
@@ -20,7 +20,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("tags")]
         public string Tags { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             var tags = Tags?.Split(',') ?? null;
 

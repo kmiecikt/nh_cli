@@ -10,7 +10,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("tags", Required = true)]
         public string TagExpression { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             if (ScheduledTime != null)
             {

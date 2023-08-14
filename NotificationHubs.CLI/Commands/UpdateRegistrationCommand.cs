@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("update-registration", HelpText = "Updates an existing registration")]
-    public record UpdateRegistrationCommand : CommandBase
+    public record UpdateRegistrationCommand : HubLevelCommandBase
     {
         [Option("pns-handle", Required = true)]
         public string PnsHandle { get; set; }
@@ -18,7 +18,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("tags")]
         public string Tags { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             var tags = Tags?.Split(',') ?? Enumerable.Empty<string>();
 

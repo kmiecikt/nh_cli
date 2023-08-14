@@ -1,11 +1,11 @@
-﻿namespace NotificationHubs.Cli.Logging
+﻿using System;
+
+namespace NotificationHubs.Cli.Logging
 {
-    internal interface ICliLogger
+    public interface ICliLogger: IDisposable
     {
         void LogRequest(Request request);
 
         void LogResponse(Response response);
-
-        void Flush();
     }
 }

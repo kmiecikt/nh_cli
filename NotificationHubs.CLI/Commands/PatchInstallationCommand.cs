@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("patch-installation", HelpText = "Updates an existing installation")]
-    public record PatchInstallationCommand : CommandBase
+    public record PatchInstallationCommand : HubLevelCommandBase
     {
         [Option("installation-id", Required = true)]
         public string InstallationId { get; set; }
@@ -17,7 +17,7 @@ namespace NotificationHubs.Cli.Commands
         [Option("user-id")]
         public string UserId { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             var updateOperations = new List<PartialUpdateOperation>();
             if (PnsHandle != null)

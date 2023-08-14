@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 namespace NotificationHubs.Cli.Commands
 {
     [Verb("get-registrations-by-channel", HelpText = "Gets registrations by channel (PNS handle)")]
-    public record GetRegistrationsByChannelCommand : CommandBase
+    public record GetRegistrationsByChannelCommand : HubLevelCommandBase
     {
         [Option("pns-handle", Required = true)] 
         public string PnsHandle { get; set; }
 
-        protected override async Task<int> Execute(NotificationHubClient nhClient)
+        protected override async Task<int> ExecuteAsync(NotificationHubClient nhClient)
         {
             var result = await nhClient.GetRegistrationsByChannelAsync(PnsHandle, 100);
             WriteCommandResult(result);

@@ -4,7 +4,7 @@ using System;
 
 namespace NotificationHubs.Cli.Commands
 {
-    public abstract record SendCommand: CommandBase
+    public abstract record SendCommand: HubLevelCommandBase
     {
         [Option("platform", Required = true)]
         public NotificationPlatform? Platform { get; set; }

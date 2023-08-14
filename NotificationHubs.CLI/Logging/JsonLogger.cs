@@ -18,9 +18,9 @@ namespace NotificationHubs.Cli.Logging
             _response = response;
         }
 
-        public void Flush()
+        public void Dispose()
         {
-            if (_response == null && _response == null)
+            if (_request == null && _response == null)
             {
                 return;
             }
@@ -39,6 +39,9 @@ namespace NotificationHubs.Cli.Logging
                 PropertyNamingPolicy  = JsonNamingPolicy.CamelCase,
             };
             Console.WriteLine(JsonSerializer.Serialize(json, serializerOptions));
+
+            _request = null;
+            _response = null;
         }
     }
 }
